@@ -1,0 +1,163 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<style>
+    div.padded {
+      padding-top: 0px;
+      padding-right: 100px;
+      padding-bottom: 0.25in;
+      padding-left: 100px;
+    }
+  </style>
+<title>Your Name  |  CS 184</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="style.css" media="screen" />
+</head>
+<body>
+
+<br />
+<h1 align="middle">3D Fluid Simulation</h1>
+    <h2 align="middle">Abhi Anand, Jonathan Li, Nathan Young</h2>
+    <div class="padded">
+        <p>Our project will simulate fluid motion and interaction. Given time, we also wish to add some extra features such as demonstrating the pressure our fluid exerts on an object or comparing the results of different viscosities in our fluid.
+</p>
+    <h2 align="middle">Abstract</h2>
+        <p>
+  Our project is to simulate 3D fluids in a controlled environment through OpenGL. We chose this topic because fluid simulation was computationally intensive. However, using an algorithm based on Macklin’s and Muller’s Position Based Fluids paper, we can efficiently compute the new positions of fluid particles. Our goal was to replicate the forces acting on fluid particles to create a realistic rendering. With enough time, our stretch goal was to be able showcase various behaviors such as varying viscosities, interaction between different fluids, etc.
+        </p>
+        <div align="middle">
+
+                <img src="water.jpg" align="middle" width="400px"/>
+                <figcaption align="middle">Water image from Macklin and Miller.</figcaption>
+
+        </div>
+
+    <h2 align="middle">Approach</h2>
+
+<p>
+  One of the biggest hurdles was to learn how to use and adopt OpenGL. We first used many tutorials online to create our first visuals, a Serpinski Gasket.
+</p>
+<div align="middle">
+
+        <img src="ser.png" align="middle" width="400px"/>
+        <figcaption align="middle">Serpinski Triangle made from an online guide in OpenGL.</figcaption>
+
+</div>
+<p>
+  After that was working, we just decided that making a project from scratch was too hard, and decided to launch off the ClothSim from project 4 and edit this to accommodate our project. We realized that since we were simulating a mass of particles, and the cloth in ClothSim was just a series of particles connected by wires, that we could disconnect the wires and compressbility forces to get a good, working water simulation.
+  Because we decided to use the ClothSim and with the current circumstances, because some of the team members skipped the ClothSim assignment, it took longer from them to get on the same page.
+</p>
+<div align="middle">
+
+        <img src="cs.png" align="middle" width="400px"/>
+        <figcaption align="middle">The ClothSim OpenGL program and GUI.</figcaption>
+
+</div>
+<p>
+  The next problem was incompressibility. In the Macklin and Miller paper, we definitely wanted particles to display cohesion, for water particles to attract other water particles, but we also wanted the particles to distance from each other if too close, to prevent compression that's unrealistic for real fluids.
+</p>
+<div align="middle">
+
+  <video width="400" controls autoplay>
+<source src="incom.mov" type="video/mp4">
+    <figcaption align="middle">A mistake that shows the particles not adhering to the fluid.</figcaption>
+</video>
+</div>
+<p>
+  This is introduced by the rho term, in which we place a density constraint that fluctuates depending on the closeness of particles. Using this, we could finally create particles that not only come close together, but have a density and volume similar to fluids.
+</p>
+<div align="middle">
+
+        <img src="rho.png" align="middle" width="400px"/>
+        <figcaption align="middle">Rho term from Macklin and Miller.</figcaption>
+
+</div>
+<p>
+After implementing the rho term, we can now see the fluid in action correctly, with greater volume and density.
+</p>
+<div align="middle">
+
+  <video width="400" controls autoplay>
+  <source src="com.mov" type="video/mp4">
+  <figcaption align="middle">Compressibility using the rho term.</figcaption>
+</video>
+</div>
+<p>
+After the physics of the fluid simulation were done, we moved on to the aesthetics of the fluid. Real fluid should have a specular reflection that moves along with the fluid. To imitate this, we simply created a specular reflection on each particle, which was represented by a tiny sphere. Having all these particles in aggregate would create the reflection of the water as a whole.
+</p>
+<div align="middle">
+    <video width="400" controls autoplay>
+        <source src="spec.mov" type="video/mp4">
+          <figcaption align="middle">Specular reflection of particles shown.</figcaption>
+    </video>
+</div>
+    <h2 align="middle">Results</h2>
+
+    <p>Here is the full fluid animation with specular reflection.</p>
+<div align="middle">
+    <video width="400" controls autoplay>
+        <source src="final.mov" type="video/mp4">
+          <figcaption align="middle">Final Result.</figcaption>
+    </video>
+
+<p> And here is the final video.</p>
+    <div align="middle">
+        <video width="400">
+            <source src="video.mov" type="video/mp4" controls autoplay>
+              <figcaption align="middle">Final Video.</figcaption>
+        </video>
+    </div>
+
+</div>
+    <h2 align="middle"> Resources </h2>
+
+<ul>
+    <li>
+      <a href="http://mmacklin.com/pbf_sig_preprint.pdf">
+        Macklin Paper with Seminal Algorithm
+      </a>
+    </li>
+    <li>
+      <b></b>
+      <a href="https://www.michael-smith-engineers.co.uk/resources/useful-info/approximate-viscosities-of-common-liquids-by-type">
+        Varying Viscosities by Liquid
+      </a>
+    </li>
+    <li>
+      <a href="http://developer.download.nvidia.com/books/gpu_gems_3/samples/gems3_ch30.pdf">
+        NVIDIA 3D Fluid Rendering Paper:
+      </a>
+    </li>
+    <li>
+      <a href="http://www.opengl-tutorial.org/">
+        Open GL Reference
+      </a>
+    </li>
+    <li>
+      <a href="https://www.gamasutra.com/view/feature/3015/pool_hall_lessons_fast_accurate_.php">
+        Vector Math to Detect Collisions
+      </a>
+    </li>
+</ul>
+
+<h2 align="middle"> Contributions </h2>
+<ul>
+    <li>
+      Abhi Anand: Adapted the mechanism of Macklin and Muller to the Clothsim.
+      </a>
+    </li>
+    <li>
+      Jonathan Li: Created OpenGL demo, Milestone presentation, project proposal, shader/coloring configuration.
+    </li>
+    <li>
+      Nathan Young: Created final writeup, final video, video milestone, project proposal, proposal website.
+
+    </li>
+    </li>
+</ul>
+
+
+
+
+</body>
+</html>
