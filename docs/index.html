@@ -18,49 +18,91 @@
 <br />
 <h1 align="middle">3D Fluid Simulation</h1>
     <h2 align="middle">Abhi Anand, Jonathan Li, Nathan Young</h2>
-
     <div class="padded">
         <p>Our project will simulate fluid motion and interaction. Given time, we also wish to add some extra features such as demonstrating the pressure our fluid exerts on an object or comparing the results of different viscosities in our fluid.
 </p>
-    <h2 align="middle">Problem Description</h2>
+    <h2 align="middle">Abstract</h2>
         <p>
-          We will use OpenGL to simulate our project, which we will have to learn from scratch. In attempting to simulate fluid motion, we must simplify the issue to hydrodynamic particle interactions. Our algorithm will be based on Miles Macklin’s and Matthias Muller’s Position Based Fluids paper. Understanding fluid dynamics is a challenging topic for this project but is necessary in mapping out particle interaction. Fluid simulation is significant in gaming for realistic visual effects and in problem solving for safe and efficient analysis.
+  Our project is to simulate 3D fluids in a controlled environment through OpenGL. We chose this topic because fluid simulation was computationally intensive. However, using an algorithm based on Macklin’s and Muller’s Position Based Fluids paper, we can efficiently compute the new positions of fluid particles. Our goal was to replicate the forces acting on fluid particles to create a realistic rendering. With enough time, our stretch goal was to be able showcase various behaviors such as varying viscosities, interaction between different fluids, etc.
         </p>
-    <h2 align="middle">Goals and Deliverables</h2>
-        <p>
-          We desire to showcase a simulation that follows as closely as it can to reality. However, setting the exact fluid positions and environment for interactions to compare our simulation with real life isn’t practical. Our current idea is to compare our simulation with proven online versions to see if the results are the same and validate our interactions by using real-world examples.
-        </p>
-        <p>
-          Our goal state is to be able to simulate the forces for particle collision in a manner replicative of water. We want to deliver a clip that shows the rendering of water being dropped into a mesh. We want the interaction between the water hitting the surface and water particles colliding with one another to be as realistic as possible. Furthermore, we will provide renderings of fluids with different viscosities (e.g. honey, oil, and water), to demonstrate that our particles are acting consistently with the physical limitations of the liquid substrate used in the process. To have a successful project, we hope to be able to render and demonstrate a working model of fluids interacting with a box-like structure. We wish to test our animations by first timing how long the fluid(s) take(s) to settle and compare them to another simulation found <a href="http://www.escapemotions.com/experiments/fluid_water_3/">here</a>. Our goal is to have comparable rates to this website, though we aren’t sure how feasible this is. Another way we hope to test our work is by comparing our renderings of different fluids to clips of those fluids being poured in the real world. If our interactions look similar (defined by how particle-surface and particle-particle collisions appear), then I believe we have succeeded in our task.
+        <div align="middle">
 
-        </p>
-        <p>
-        Other than our main fluid simulation, we wish to add extra features that give us useful information about our fluid rather than just observe the fluid in motion. For example, the changes in the fluid pressure on an object or the changes in fluid motion as we change viscosity are two such features we wish to implement. We will also try to model the interaction between two different fluids (e.g. water and oil). Another stretch goal we have for the project is to use various materials for the structure that the fluid is dropped into. An example of this could be comparing a metal box with one made of a paper-towel like texture. This latter goal does seem more complicated as this requires a better understanding of how fluid textures interact with semi-permeable materials. These goals would give our project more realistic application points as well as give us a more encompassing understanding of fluid nature.
-        </p>
-    <h2 align="middle">Schedule</h2>
-<ul>
+                <img src="water.jpg" align="middle" width="400px"/>
+                <figcaption align="middle">Water image from Macklin and Miller.</figcaption>
 
-    <li>
-      <b>Week 1:</b>
-      Familiarize ourselves with OpenGL and other C++ libraries, understand the paper, and begin setting up meshes & particles as necessary.
-    </li>
-    <li>
-      <b>Week 2:</b>
-      Implement forces that act on our particles & mesh like gravity.
-    </li>
-    <li>
-      <b>Week 3:</b>
-      Implement particle to particle collisions and particle to surface collisions. Work on the application of viscosity to the particles. Potentially look into modifying viscosity based on particle type.
-    </li>
-    <li>
-      <b>Week 4:</b>
-      Render the particles to fluids and add any extra features. Obtain the clips necessary for the final website.
-    </li>
-</ul>
+        </div>
+
+    <h2 align="middle">Approach</h2>
+
+<p>
+  One of the biggest hurdles was to learn how to use and adopt OpenGL. We first used many tutorials online to create our first visuals, a Serpinski Gasket.
+</p>
+<div align="middle">
+
+        <img src="ser.png" align="middle" width="400px"/>
+        <figcaption align="middle">Serpinski Triangle made from an online guide in OpenGL.</figcaption>
+
+</div>
+<p>
+  After that was working, we just decided that making a project from scratch was too hard, and decided to launch off the ClothSim from project 4 and edit this to accommodate our project. We realized that since we were simulating a mass of particles, and the cloth in ClothSim was just a series of particles connected by wires, that we could disconnect the wires and compressbility forces to get a good, working water simulation.
+  Because we decided to use the ClothSim and with the current circumstances, because some of the team members skipped the ClothSim assignment, it took longer from them to get on the same page.
+</p>
+<div align="middle">
+
+        <img src="cs.png" align="middle" width="400px"/>
+        <figcaption align="middle">The ClothSim OpenGL program and GUI.</figcaption>
+
+</div>
+<p>
+  The next problem was incompressibility. In the Macklin and Miller paper, we definitely wanted particles to display cohesion, for water particles to attract other water particles, but we also wanted the particles to distance from each other if too close, to prevent compression that's unrealistic for real fluids.
+</p>
+<div align="middle">
+
+  <video width="400" controls autoplay>
+<source src="incom.mov" type="video/mp4">
+    <figcaption align="middle">A mistake that shows the particles not adhering to the fluid.</figcaption>
+</video>
+</div>
+<p>
+  This is introduced by the rho term, in which we place a density constraint that fluctuates depending on the closeness of particles. Using this, we could finally create particles that not only come close together, but have a density and volume similar to fluids.
+</p>
+<div align="middle">
+
+        <img src="rho.png" align="middle" width="400px"/>
+        <figcaption align="middle">Rho term from Macklin and Miller.</figcaption>
+
+</div>
+<p>
+After implementing the rho term, we can now see the fluid in action correctly, with greater volume and density.
+</p>
+<div align="middle">
+
+  <video width="400" controls autoplay>
+  <source src="com.mov" type="video/mp4">
+  <figcaption align="middle">Compressibility using the rho term.</figcaption>
+</video>
+</div>
+<p>
+After the physics of the fluid simulation were done, we moved on to the aesthetics of the fluid. Real fluid should have a specular reflection that moves along with the fluid. To imitate this, we simply created a specular reflection on each particle, which was represented by a tiny sphere. Having all these particles in aggregate would create the reflection of the water as a whole.
+</p>
+<div align="middle">
+    <video width="400" controls autoplay>
+        <source src="spec.mov" type="video/mp4">
+          <figcaption align="middle">Specular reflection of particles shown.</figcaption>
+    </video>
+</div>
+    <h2 align="middle">Results</h2>
+
+    Here is the full fluid animation with specular reflection.
+<div align="middle">
+    <video width="400" controls autoplay>
+        <source src="final.mov" type="video/mp4">
+          <figcaption align="middle">Final Result.</figcaption>
+    </video>
+
+</div>
     <h2 align="middle"> Resources </h2>
-    <p>
-      The resources we’ve selected for the project are centered around bettering our understanding of what we need to implement and the baseline software we need to understand to translate the algorithms into usable code.
-    </p>
+
 <ul>
     <li>
       <a href="http://mmacklin.com/pbf_sig_preprint.pdf">
@@ -88,15 +130,25 @@
         Vector Math to Detect Collisions
       </a>
     </li>
+</ul>
+
+<h2 align="middle"> Contributions </h2>
+<ul>
     <li>
-      <b>Software:</b>
-      We’ll be relying on OpenGL and C++ for the software.
+      Abhi Anand:
+      </a>
     </li>
     <li>
-      <b>Hardware:</b>
-      Personal laptops, nothing too fancy.
+      Jonathan Li:
+    </li>
+    <li>
+      Nathan Young: Created webpage, video milestone, project proposal.
+
+    </li>
     </li>
 </ul>
+
+
 
 
 </body>
